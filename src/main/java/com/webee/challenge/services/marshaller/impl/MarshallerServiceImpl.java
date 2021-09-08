@@ -37,6 +37,20 @@ public class MarshallerServiceImpl implements MarshallerService {
 
     @Override
     public String marshallDeviceList(List<Device> deviceList) {
-        return null;
+        if (deviceList.size() == 1) {
+            return marshallDevice(deviceList.get(0));
+        }
+
+        StringBuilder marshalledList = new StringBuilder("{");
+
+        deviceList.forEach(device -> {
+            String marshalledDevice = marshallDevice(device);
+            marshalledList.append(marshalledDevice);
+            marshalledList.append(",");
+        });
+
+        marshalledList.setLength(marshalledList.length()-1);
+        marshalledList.append("}");
+        return marshalledList.toString();
     }
 }

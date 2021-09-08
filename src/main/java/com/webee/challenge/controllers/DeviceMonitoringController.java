@@ -37,12 +37,20 @@ public class DeviceMonitoringController {
     }
 
     @GetMapping(path = "/get-devices-list", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<List<Device>> getDevices() {
+    public ResponseEntity<String> getDevices() {
         LOG.info("GET Request received, endpoint: /device-monitoring/get-devices-list");
+        List<Device> deviceList = null;
 
-        List<Device> deviceList = dataBaseService.searchAllDevices();
+        try{
+            deviceList = dataBaseService.searchAllDevices();
+        }catch (DatabaseException dataBaseException){
+            LOG.error("Problem while searching in the database: ", dataBaseException);
+            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
-        return new ResponseEntity<>(deviceList, HttpStatus.OK);
+        String marshalledDevice = marshallerService.marshallDeviceList(deviceList);
+        LOG.info("Devices found: {}", deviceList);
+        return new ResponseEntity<>(marshalledDevice, HttpStatus.OK);
     }
 
     @GetMapping(path = "/get-device-by-mac/{deviceMac}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
