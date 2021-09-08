@@ -128,11 +128,17 @@ public class DeviceMonitoringController {
 
         try {
             deviceValidationService.validateId(deviceID);
+            dataBaseService.deleteDevice(deviceID);
+
         } catch (ValidationException validationException) {
+            LOG.error("Invalid ID: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
+
+        } catch (DatabaseException dataBaseException) {
+            LOG.error("Device not deleted: ", dataBaseException);
+            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        dataBaseService.deleteDevice(deviceID);
         return new ResponseEntity<>("Device deleted", HttpStatus.OK);
     }
 }
