@@ -36,6 +36,19 @@ public class DeviceMonitoringController {
         this.marshallerService = marshallerService;
     }
 
+    /**
+     * Returns a JSON formatted List of saved devices, when receiving a GET request in the
+     * endpoint: /device-monitoring/get-devices-list.
+     *
+     * @return ResponseEntity<String> there are two possible responses when a request reaches this
+     *          endpoint:
+     *
+     *          1) HttpStatus = 200, the body of the response has a marshall list of all registered
+     *          devices.
+     *
+     *          2) HttpStatus = 500, the body of the response has a message with the problem, related
+     *          to the database.
+     */
     @GetMapping(path = "/get-devices-list", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> getDevices() {
         LOG.info("GET Request received, endpoint: /device-monitoring/get-devices-list");
@@ -53,6 +66,23 @@ public class DeviceMonitoringController {
         return new ResponseEntity<>(marshalledDevice, HttpStatus.OK);
     }
 
+    /**
+     * Returns a JSON formatted device if exists, when receiving a GET request in the endpoint:
+     * /device-monitoring/get-device-by-mac/macAddress.
+     *
+     * @param deviceMac MAC Address of the device
+     *
+     * @return ResponseEntity<String> there are three possible responses when a request reaches this
+     *          endpoint:
+     *
+     *          1) HttpStatus = 200, the body of the response has the marshall device that was found.
+     *
+     *          2) HttpStatus = 400, the body of the response has a message with the problem, related
+     *          to a validation of the MAC Address.
+     *
+     *          3) HttpStatus = 500, the body of the response has a message with the problem, related
+     *          to the database.
+     */
     @GetMapping(path = "/get-device-by-mac/{deviceMac}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> getDeviceByMac(@PathVariable String deviceMac) {
         LOG.info("GET Request received, endpoint: /device-monitoring/get-device-by-mac/{}", deviceMac);
@@ -77,6 +107,23 @@ public class DeviceMonitoringController {
         return new ResponseEntity<>(marshalledDevice, HttpStatus.OK);
     }
 
+    /**
+     * Returns a JSON formatted device if exists, when receiving a GET request in the endpoint:
+     * /device-monitoring/get-device-by-id/deviceID.
+     *
+     * @param deviceID ID of the device
+     *
+     * @return ResponseEntity<String> there are three possible responses when a request reaches this
+     *          endpoint:
+     *
+     *          1) HttpStatus = 200, the body of the response has the marshall device that was found.
+     *
+     *          2) HttpStatus = 400, the body of the response has a message with the problem, related
+     *          to a validation of the ID.
+     *
+     *          3) HttpStatus = 500, the body of the response has a message with the problem, related
+     *          to the database.
+     */
     @GetMapping(path = "/get-device-by-id/{deviceID}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> getDeviceById(@PathVariable String deviceID) {
         LOG.info("GET Request received, endpoint: /device-monitoring/get-device-by-id/{}", deviceID);
@@ -100,6 +147,27 @@ public class DeviceMonitoringController {
         return new ResponseEntity<>(marshalledDevice, HttpStatus.OK);
     }
 
+    /**
+     * Register a device, when receiving a POST request in the endpoint: /device-monitoring/register-device
+     * It expects a body message like:
+     * {
+     *    "date": "21042020",
+     *    "macAddress": "FF:AA:FF:24:24:FF"
+     * }
+     *
+     * @param device Device parameter (date and MAC address only)
+     *
+     * @return ResponseEntity<String> there are three possible responses when a request reaches this
+     *          endpoint:
+     *
+     *          1) HttpStatus = 200, the body of the response has a message "device registered".
+     *
+     *          2) HttpStatus = 400, the body of the response has a message with the problem, related
+     *          to a validation of the device (either the date or the MAC address).
+     *
+     *          3) HttpStatus = 500, the body of the response has a message with the problem, related
+     *          to the database.
+     */
     @PostMapping(path = "/register-device", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> registerDevice(@RequestBody DeviceRequest device) {
@@ -119,9 +187,26 @@ public class DeviceMonitoringController {
         }
 
         LOG.info("Device registered: {}", marshallerService.marshallDeviceRequest(device));
-        return new ResponseEntity<>("Device created", HttpStatus.CREATED);
+        return new ResponseEntity<>("Device registered", HttpStatus.CREATED);
     }
 
+
+    /**
+     * Delete a device based on its ID, if exists.
+     *
+     * @param deviceID ID of the device
+     *
+     * @return ResponseEntity<String> there are three possible responses when a request reaches this
+     *          endpoint:
+     *
+     *          1) HttpStatus = 200, the body of the response has a message "device deleted".
+     *
+     *          2) HttpStatus = 400, the body of the response has a message with the problem, related
+     *          to a validation of the device ID.
+     *
+     *          3) HttpStatus = 500, the body of the response has a message with the problem, related
+     *          to the database.
+     */
     @DeleteMapping(path = "/delete-device/{deviceID}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> deleteDeviceByID(@PathVariable String deviceID) {
         LOG.info("Delete request received, ID: {}", deviceID);
