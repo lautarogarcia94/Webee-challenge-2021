@@ -64,22 +64,32 @@ public class DeviceMonitoringController {
             return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(marshallerService.marshallDevice(device), HttpStatus.OK);
+        String marshalledDevice = marshallerService.marshallDevice(device);
+        LOG.info("Device with {} MAC Address found: {}", deviceMac, marshalledDevice);
+        return new ResponseEntity<>(marshalledDevice, HttpStatus.OK);
     }
 
     @GetMapping(path = "/get-device-by-id/{deviceID}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> getDeviceById(@PathVariable String deviceID) {
         LOG.info("GET Request received, endpoint: /device-monitoring/get-device/{}", deviceID);
+        Device device = null;
 
         try {
             deviceValidationService.validateId(deviceID);
+            device = dataBaseService.searchDeviceById(deviceID);
+
         } catch (ValidationException validationException) {
             LOG.error("Invalid ID: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }catch (DatabaseException dataBaseException) {
+            LOG.error("Problem while searching in the database: ", dataBaseException);
+            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        Device device = dataBaseService.searchDeviceById(deviceID);
-        return new ResponseEntity<>(device.toString(), HttpStatus.OK);
+        String marshalledDevice = marshallerService.marshallDevice(device);
+        LOG.info("Device with {} ID found: {}", deviceID, marshalledDevice);
+        return new ResponseEntity<>(marshalledDevice, HttpStatus.OK);
     }
 
     @PostMapping(path = "/register-device", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
@@ -100,6 +110,7 @@ public class DeviceMonitoringController {
             return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+        LOG.info("Device {} registered", device.toString());
         return new ResponseEntity<>("Device created", HttpStatus.CREATED);
     }
 

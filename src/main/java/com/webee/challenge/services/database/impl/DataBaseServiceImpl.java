@@ -74,14 +74,32 @@ public class DataBaseServiceImpl implements DataBaseService {
 
     }
 
+
     @Override
     public Device searchDeviceById(String id) {
-        Device device = Device.builder()
-                .date("08-09-2021")
-                .macAddress("MAC Address")
-                .ID("10")
-                .build();
-        return device;
+        CollectionReference resultados = firestoreDB.collection(Constants.COLLECTION);
+        Query query = resultados.whereEqualTo("id", id);
+        ApiFuture<QuerySnapshot> futureQuerySnapshot = query.get();
+        QuerySnapshot querySnapshot = null;
+        List<QueryDocumentSnapshot> documentList = null;
+
+        try {
+            LOG.info("Searching for device with {} ID", id);
+            querySnapshot = futureQuerySnapshot.get();
+            documentList = querySnapshot.getDocuments();
+
+        } catch (Exception exc) {
+            String errorMessage = "There was a problem while searching for " + id + " ID";
+            LOG.error(errorMessage);
+            throw new DatabaseException(errorMessage, exc);
+        }
+
+        if (documentList.size() != 1) {
+            throw new DatabaseException("Found " + documentList.size() + " devices with that ID");
+        }
+
+        DocumentSnapshot document2 = documentList.get(0);
+        return document2.toObject(Device.class);
     }
 
     @Override
@@ -93,6 +111,7 @@ public class DataBaseServiceImpl implements DataBaseService {
         List<QueryDocumentSnapshot> documentList = null;
 
         try {
+            LOG.info("Searching for device with {} MAC Address", macAddress);
             querySnapshot = futureQuerySnapshot.get();
             documentList = querySnapshot.getDocuments();
         } catch (Exception exc) {
@@ -100,7 +119,6 @@ public class DataBaseServiceImpl implements DataBaseService {
             LOG.error(errorMessage);
             throw new DatabaseException(errorMessage, exc);
         }
-
 
         if (documentList.size() != 1) {
             throw new DatabaseException("Found " + documentList.size() + " devices with that MAC Address");
