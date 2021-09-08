@@ -1,14 +1,17 @@
 package com.webee.challenge.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DeviceRequest {
 
-    private LocalDate date;
+    private String date;
+
     private String macAddress;
 }
