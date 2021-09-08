@@ -1,12 +1,15 @@
 package com.webee.challenge.services.marshaller;
 
 import com.webee.challenge.model.Device;
+import com.webee.challenge.model.DeviceRequest;
 
 import java.util.List;
 
 public interface MarshallerService {
 
-    public String marshallDevice(Device device);
+    String marshallDevice(Device device);
 
-    public String marshallDeviceList(List<Device> deviceList);
+    String marshallDeviceRequest(DeviceRequest device);
+
+    String marshallDeviceList(List<Device> deviceList);
 }

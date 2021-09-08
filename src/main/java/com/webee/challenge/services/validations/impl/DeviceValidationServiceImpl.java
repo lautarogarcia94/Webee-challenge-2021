@@ -58,7 +58,7 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
             validateDate(realDate);
         } catch (DateTimeParseException parseException) {
             LOG.error("{} is not a valid date format", date);
-            throw new ValidationException(date + " is not a valid date format", parseException);
+            throw new ValidationException(date + " is not a valid date format (valid format is dd-MM-yyyy)", parseException);
         }
 
         LOG.info("Device validated");

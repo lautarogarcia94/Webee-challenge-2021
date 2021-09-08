@@ -55,7 +55,7 @@ public class DeviceMonitoringController {
 
     @GetMapping(path = "/get-device-by-mac/{deviceMac}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> getDeviceByMac(@PathVariable String deviceMac) {
-        LOG.info("GET Request received, endpoint: /device-monitoring/get-device/{}", deviceMac);
+        LOG.info("GET Request received, endpoint: /device-monitoring/get-device-by-mac/{}", deviceMac);
         Device device = null;
 
         try {
@@ -79,7 +79,7 @@ public class DeviceMonitoringController {
 
     @GetMapping(path = "/get-device-by-id/{deviceID}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> getDeviceById(@PathVariable String deviceID) {
-        LOG.info("GET Request received, endpoint: /device-monitoring/get-device/{}", deviceID);
+        LOG.info("GET Request received, endpoint: /device-monitoring/get-device-by-id/{}", deviceID);
         Device device = null;
 
         try {
@@ -118,7 +118,7 @@ public class DeviceMonitoringController {
             return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        LOG.info("Device {} registered", device.toString());
+        LOG.info("Device registered: {}", marshallerService.marshallDeviceRequest(device));
         return new ResponseEntity<>("Device created", HttpStatus.CREATED);
     }
 
