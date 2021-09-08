@@ -41,9 +41,9 @@ public class DeviceMonitoringController {
         LOG.info("GET Request received, endpoint: /device-monitoring/get-devices-list");
         List<Device> deviceList = null;
 
-        try{
+        try {
             deviceList = dataBaseService.searchAllDevices();
-        }catch (DatabaseException dataBaseException){
+        } catch (DatabaseException dataBaseException) {
             LOG.error("Problem while searching in the database: ", dataBaseException);
             return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -90,7 +90,7 @@ public class DeviceMonitoringController {
             LOG.error("Invalid ID: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
 
-        }catch (DatabaseException dataBaseException) {
+        } catch (DatabaseException dataBaseException) {
             LOG.error("Problem while searching in the database: ", dataBaseException);
             return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

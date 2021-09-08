@@ -42,14 +42,13 @@ public class MarshallerServiceImpl implements MarshallerService {
         }
 
         StringBuilder marshalledList = new StringBuilder("{");
-
         deviceList.forEach(device -> {
             String marshalledDevice = marshallDevice(device);
             marshalledList.append(marshalledDevice);
             marshalledList.append(",");
         });
 
-        marshalledList.setLength(marshalledList.length()-1);
+        marshalledList.setLength(marshalledList.length() - 1);
         marshalledList.append("}");
         return marshalledList.toString();
     }
