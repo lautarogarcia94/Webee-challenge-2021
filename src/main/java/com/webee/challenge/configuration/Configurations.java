@@ -1,4 +1,4 @@
-package com.webee.challenge.Configuration;
+package com.webee.challenge.configuration;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;

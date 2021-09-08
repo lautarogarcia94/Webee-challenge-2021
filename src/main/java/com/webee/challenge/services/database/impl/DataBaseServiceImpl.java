@@ -70,12 +70,12 @@ public class DataBaseServiceImpl implements DataBaseService {
     }
 
     @Override
-    public void deleteDevice(Integer id) {
+    public void deleteDevice(String id) {
 
     }
 
     @Override
-    public Device searchDeviceById(Integer id) {
+    public Device searchDeviceById(String id) {
         Device device = Device.builder()
                 .date("08-09-2021")
                 .macAddress("MAC Address")

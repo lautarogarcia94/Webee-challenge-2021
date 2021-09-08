@@ -8,7 +8,7 @@ public interface DeviceValidationService {
 
     void validateMac(String macAddress) throws ValidationException;
 
-    void validateId(Integer id) throws ValidationException;
+    void validateId(String id) throws ValidationException;
 
     void validateDeviceRequest(DeviceRequest deviceRequest) throws ValidationException;
 

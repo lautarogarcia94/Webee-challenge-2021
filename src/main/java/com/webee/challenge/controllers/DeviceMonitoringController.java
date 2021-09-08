@@ -53,9 +53,12 @@ public class DeviceMonitoringController {
         try {
             deviceValidationService.validateMac(deviceMac);
             device = dataBaseService.searchDeviceByMac(deviceMac);
+
         } catch (ValidationException validationException) {
+
             LOG.error("Invalid MAC address: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
+
         } catch (DatabaseException dataBaseException) {
             LOG.error("Problem while searching in the database: ", dataBaseException);
             return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,7 +68,7 @@ public class DeviceMonitoringController {
     }
 
     @GetMapping(path = "/get-device-by-id/{deviceID}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<String> getDeviceById(@PathVariable Integer deviceID) {
+    public ResponseEntity<String> getDeviceById(@PathVariable String deviceID) {
         LOG.info("GET Request received, endpoint: /device-monitoring/get-device/{}", deviceID);
 
         try {
@@ -101,7 +104,7 @@ public class DeviceMonitoringController {
     }
 
     @DeleteMapping(path = "/delete-device/{deviceID}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<String> deleteDeviceByID(@PathVariable Integer deviceID) {
+    public ResponseEntity<String> deleteDeviceByID(@PathVariable String deviceID) {
         LOG.info("Delete request received, ID: {}", deviceID);
 
         try {

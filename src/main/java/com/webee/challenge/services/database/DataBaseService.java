@@ -9,9 +9,9 @@ public interface DataBaseService {
 
     void saveDevice(DeviceRequest deviceRequest);
 
-    void deleteDevice(Integer id);
+    void deleteDevice(String id);
 
-    Device searchDeviceById(Integer id);
+    Device searchDeviceById(String id);
 
     Device searchDeviceByMac(String macAddress);
 

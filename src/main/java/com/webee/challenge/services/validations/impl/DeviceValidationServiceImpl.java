@@ -29,12 +29,17 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
     }
 
     @Override
-    public void validateId(Integer id) throws ValidationException {
+    public void validateId(String id) throws ValidationException {
         LOG.info("Validating ID: {}", id);
 
-        if (id < 0) {
-            LOG.error("{} is not a valid ID", id);
-            throw new ValidationException("Not a valid ID (it is a negative number)");
+        if (id.length() != 10) {
+            LOG.error("{} is not a valid ID (it does not have 10 characters)", id);
+            throw new ValidationException("Not a valid ID (it does not have 10 characters)");
+        }
+
+        if (!id.matches(Constants.REGEXID)) {
+            LOG.error("{} is not a valid ID (some character is not a letter between 'a to z')", id);
+            throw new ValidationException("Not a valid ID (some character is not a letter between 'a to z')");
         }
 
         LOG.info("{} is a valid ID", id);
