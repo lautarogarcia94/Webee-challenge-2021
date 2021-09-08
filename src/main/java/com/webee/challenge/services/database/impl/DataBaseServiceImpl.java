@@ -130,20 +130,28 @@ public class DataBaseServiceImpl implements DataBaseService {
 
     @Override
     public List<Device> searchAllDevices() {
-        Device device1 = Device.builder()
-                .date("08-09-2021")
-                .macAddress("MAC Address")
-                .ID("10")
-                .build();
-        Device device2 = Device.builder()
-                .date("08-09-2021")
-                .macAddress("MAC Address")
-                .ID("10")
-                .build();
-        List<Device> deviceList = new ArrayList<>();
-        deviceList.add(device1);
-        deviceList.add(device2);
-        return deviceList;
+        ApiFuture<QuerySnapshot> query = firestoreDB.collection(Constants.COLLECTION).get();
+        QuerySnapshot querySnapshot = null;
+
+        try {
+            querySnapshot = query.get();
+
+        } catch (Exception exc) {
+            LOG.error("Something went wrong while reading the database");
+            throw new DatabaseException("Something went wrong while reading the database", exc);
+        }
+
+        List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+        return generarListaResult(documents);
+    }
+
+    private List<Device> generarListaResult(List<QueryDocumentSnapshot> documents) {
+        List<Device> lista = new ArrayList<>();
+
+        for (QueryDocumentSnapshot document : documents) {
+            lista.add(document.toObject(Device.class));
+        }
+        return lista;
     }
 
     private String generateRandomId(int length) {
