@@ -13,5 +13,5 @@ public class Device {
 
     private String date;
     private String macAddress;
-    private Integer ID;
+    private String ID;
 }

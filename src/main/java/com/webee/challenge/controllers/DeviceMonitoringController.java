@@ -4,6 +4,7 @@ import com.google.firebase.database.DatabaseException;
 import com.webee.challenge.model.Device;
 import com.webee.challenge.model.DeviceRequest;
 import com.webee.challenge.services.database.DataBaseService;
+import com.webee.challenge.services.marshaller.MarshallerService;
 import com.webee.challenge.services.validations.DeviceValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,12 +25,15 @@ public class DeviceMonitoringController {
 
     private DeviceValidationService deviceValidationService;
     private DataBaseService dataBaseService;
+    private MarshallerService marshallerService;
 
     @Autowired
     public DeviceMonitoringController(DeviceValidationService deviceValidationService,
-                                      DataBaseService dataBaseService) {
+                                      DataBaseService dataBaseService,
+                                      MarshallerService marshallerService) {
         this.deviceValidationService = deviceValidationService;
         this.dataBaseService = dataBaseService;
+        this.marshallerService = marshallerService;
     }
 
     @GetMapping(path = "/get-devices-list", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -44,16 +48,20 @@ public class DeviceMonitoringController {
     @GetMapping(path = "/get-device-by-mac/{deviceMac}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> getDeviceByMac(@PathVariable String deviceMac) {
         LOG.info("GET Request received, endpoint: /device-monitoring/get-device/{}", deviceMac);
+        Device device = null;
 
         try {
             deviceValidationService.validateMac(deviceMac);
+            device = dataBaseService.searchDeviceByMac(deviceMac);
         } catch (ValidationException validationException) {
             LOG.error("Invalid MAC address: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (DatabaseException dataBaseException) {
+            LOG.error("Problem while searching in the database: ", dataBaseException);
+            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        Device device = dataBaseService.searchDeviceByMac(deviceMac);
-        return new ResponseEntity<>(device.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(marshallerService.marshallDevice(device), HttpStatus.OK);
     }
 
     @GetMapping(path = "/get-device-by-id/{deviceID}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -84,9 +92,9 @@ public class DeviceMonitoringController {
             LOG.error("Invalid device: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch (DatabaseException databaseException) {
-            LOG.error("Device not inserted: ", databaseException);
-            return new ResponseEntity<>(databaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (DatabaseException dataBaseException) {
+            LOG.error("Device not inserted: ", dataBaseException);
+            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>("Device created", HttpStatus.CREATED);

@@ -5,12 +5,14 @@ import com.webee.challenge.model.DeviceRequest;
 import com.webee.challenge.services.validations.DeviceValidationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.xml.bind.ValidationException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+@Service
 public class DeviceValidationServiceImpl implements DeviceValidationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceValidationServiceImpl.class);

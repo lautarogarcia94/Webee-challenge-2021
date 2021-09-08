@@ -79,19 +79,35 @@ public class DataBaseServiceImpl implements DataBaseService {
         Device device = Device.builder()
                 .date("08-09-2021")
                 .macAddress("MAC Address")
-                .ID(10)
+                .ID("10")
                 .build();
         return device;
     }
 
     @Override
     public Device searchDeviceByMac(String macAddress) {
-        Device device = Device.builder()
-                .date("08-09-2021")
-                .macAddress("MAC Address")
-                .ID(10)
-                .build();
-        return device;
+        CollectionReference resultados = firestoreDB.collection(Constants.COLLECTION);
+        Query query = resultados.whereEqualTo("macAddress", macAddress);
+        ApiFuture<QuerySnapshot> futureQuerySnapshot = query.get();
+        QuerySnapshot querySnapshot = null;
+        List<QueryDocumentSnapshot> documentList = null;
+
+        try {
+            querySnapshot = futureQuerySnapshot.get();
+            documentList = querySnapshot.getDocuments();
+        } catch (Exception exc) {
+            String errorMessage = "There was a problem while searching for " + macAddress + "MAC address";
+            LOG.error(errorMessage);
+            throw new DatabaseException(errorMessage, exc);
+        }
+
+
+        if (documentList.size() != 1) {
+            throw new DatabaseException("Found " + documentList.size() + " devices with that MAC Address");
+        }
+
+        DocumentSnapshot document2 = documentList.get(0);
+        return document2.toObject(Device.class);
     }
 
     @Override
@@ -99,12 +115,12 @@ public class DataBaseServiceImpl implements DataBaseService {
         Device device1 = Device.builder()
                 .date("08-09-2021")
                 .macAddress("MAC Address")
-                .ID(10)
+                .ID("10")
                 .build();
         Device device2 = Device.builder()
                 .date("08-09-2021")
                 .macAddress("MAC Address")
-                .ID(10)
+                .ID("10")
                 .build();
         List<Device> deviceList = new ArrayList<>();
         deviceList.add(device1);
