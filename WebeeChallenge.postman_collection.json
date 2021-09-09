@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "f7b76230-c50b-4ac1-a923-837617cf0d10",
+		"name": "WebeeChallenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get all devices list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/device-monitoring/get-devices-list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"device-monitoring",
+						"get-devices-list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register device",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"20022021\",\r\n    \"macAddress\": \"BB:B2:B3:B4:B5:FF\"\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/device-monitoring/register-device",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"device-monitoring",
+						"register-device"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove device by ID",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/device-monitoring/delete-device/iwfwwuvmiq",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"device-monitoring",
+						"delete-device",
+						"iwfwwuvmiq"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get device by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/device-monitoring/get-device-by-id/iwfwwuvmiq",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"device-monitoring",
+						"get-device-by-id",
+						"iwfwwuvmiq"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get device by MAC Address",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/device-monitoring/get-device-by-mac/11:02:AA:00:24:4A",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"device-monitoring",
+						"get-device-by-mac",
+						"11:02:AA:00:24:4A"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
