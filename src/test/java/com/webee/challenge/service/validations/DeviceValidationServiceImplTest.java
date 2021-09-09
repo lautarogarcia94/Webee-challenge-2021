@@ -1,7 +1,5 @@
 package com.webee.challenge.service.validations;
 
-import com.google.firebase.FirebaseException;
-import com.webee.challenge.model.Device;
 import com.webee.challenge.model.DeviceRequest;
 import com.webee.challenge.services.validations.DeviceValidationService;
 import com.webee.challenge.services.validations.impl.DeviceValidationServiceImpl;
@@ -11,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import javax.xml.bind.ValidationException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 public class DeviceValidationServiceImplTest {
 
@@ -62,7 +59,7 @@ public class DeviceValidationServiceImplTest {
     @Test
     void shouldValidateDeviceOK() {
         DeviceRequest deviceRequest = DeviceRequest.builder()
-                .date("10-08-2021")
+                .date("10082021")
                 .macAddress("FF:FF:FF:FF:FF:FF")
                 .build();
 
@@ -72,11 +69,11 @@ public class DeviceValidationServiceImplTest {
     @Test
     void shouldThrowValidationExceptionWhenDateHasInvalidFormat() {
         DeviceRequest deviceRequest = DeviceRequest.builder()
-                .date("10082021")
+                .date("10-082021")
                 .macAddress("FF:FF:FF:FF:FF:FF")
                 .build();
 
-        String expectedMessage = "10082021 is not a valid date format (valid format is ddMMyyyy)";
+        String expectedMessage = "10-082021 is not a valid date format (valid format is ddMMyyyy)";
 
         try {
             deviceValidationService.validateDeviceRequest(deviceRequest);
@@ -89,7 +86,7 @@ public class DeviceValidationServiceImplTest {
     @Test
     void shouldThrowValidationExceptionWhenDateIsBefore2020() {
         DeviceRequest deviceRequest = DeviceRequest.builder()
-                .date("10-08-2019")
+                .date("10082019")
                 .macAddress("FF:FF:FF:FF:FF:FF")
                 .build();
 
@@ -106,7 +103,7 @@ public class DeviceValidationServiceImplTest {
     @Test
     void shouldThrowValidationExceptionWhenDeviceValidationWithInvalidMac() {
         DeviceRequest deviceRequest = DeviceRequest.builder()
-                .date("10-08-2020")
+                .date("10082020")
                 .macAddress("Invalid MAC Address")
                 .build();
 
