@@ -1,7 +1,6 @@
 package com.webee.challenge.controllers;
 
 import com.google.firebase.FirebaseException;
-import com.google.firebase.database.DatabaseException;
 import com.webee.challenge.model.Device;
 import com.webee.challenge.model.DeviceRequest;
 import com.webee.challenge.services.database.DataBaseService;
@@ -176,7 +175,7 @@ public class DeviceMonitoringController {
 
         try {
             deviceValidationService.validateDeviceRequest(device);
-            dataBaseService.saveDevice(device);
+            dataBaseService.registerDevice(device);
 
         } catch (ValidationException validationException) {
             LOG.error("Invalid device: ", validationException);

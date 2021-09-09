@@ -43,8 +43,7 @@ public class DataBaseServiceImpl implements DataBaseService {
     @Autowired
     public void setFirestoreDB() {
         try {
-            FileInputStream serviceAccount = new FileInputStream("C:\\Users\\Usuario\\Desktop\\ChallengeWebee\\src\\main\\resources\\authenticationJson\\challengewebee-firebase.json");
-            //FileInputStream serviceAccount = new FileInputStream(jsonPath);
+            FileInputStream serviceAccount = new FileInputStream(jsonPath);
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
@@ -57,7 +56,7 @@ public class DataBaseServiceImpl implements DataBaseService {
     }
 
     @Override
-    public void saveDevice(DeviceRequest deviceRequest) throws FirebaseException{
+    public void registerDevice(DeviceRequest deviceRequest) throws FirebaseException{
         DocumentReference docRef = firestoreDB.collection(COLLECTION).document();
         Map<String, Object> data = new HashMap<>();
 

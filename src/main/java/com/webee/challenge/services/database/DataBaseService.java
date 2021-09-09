@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DataBaseService {
 
-    void saveDevice(DeviceRequest deviceRequest) throws FirebaseException;
+    void registerDevice(DeviceRequest deviceRequest) throws FirebaseException;
 
     void deleteDevice(String id) throws FirebaseException;
 
