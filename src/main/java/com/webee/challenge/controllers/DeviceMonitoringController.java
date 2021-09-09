@@ -1,5 +1,6 @@
 package com.webee.challenge.controllers;
 
+import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DatabaseException;
 import com.webee.challenge.model.Device;
 import com.webee.challenge.model.DeviceRequest;
@@ -56,9 +57,9 @@ public class DeviceMonitoringController {
 
         try {
             deviceList = dataBaseService.searchAllDevices();
-        } catch (DatabaseException dataBaseException) {
-            LOG.error("Problem while searching in the database: ", dataBaseException);
-            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (FirebaseException firebaseException) {
+            LOG.error("Problem while searching in the database: ", firebaseException);
+            return new ResponseEntity<>(firebaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         String marshalledDevice = marshallerService.marshallDeviceList(deviceList);
@@ -97,9 +98,9 @@ public class DeviceMonitoringController {
             LOG.error("Invalid MAC address: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch (DatabaseException dataBaseException) {
-            LOG.error("Problem while searching in the database: ", dataBaseException);
-            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (FirebaseException firebaseException) {
+            LOG.error("Problem while searching in the database: ", firebaseException);
+            return new ResponseEntity<>(firebaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         String marshalledDevice = marshallerService.marshallDevice(device);
@@ -137,9 +138,9 @@ public class DeviceMonitoringController {
             LOG.error("Invalid ID: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch (DatabaseException dataBaseException) {
-            LOG.error("Problem while searching in the database: ", dataBaseException);
-            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (FirebaseException firebaseException) {
+            LOG.error("Problem while searching in the database: ", firebaseException);
+            return new ResponseEntity<>(firebaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         String marshalledDevice = marshallerService.marshallDevice(device);
@@ -181,9 +182,9 @@ public class DeviceMonitoringController {
             LOG.error("Invalid device: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch (DatabaseException dataBaseException) {
-            LOG.error("Device not inserted: ", dataBaseException);
-            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (FirebaseException firebaseException) {
+            LOG.error("Device not inserted: ", firebaseException);
+            return new ResponseEntity<>(firebaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         LOG.info("Device registered: {}", marshallerService.marshallDeviceRequest(device));
@@ -219,9 +220,9 @@ public class DeviceMonitoringController {
             LOG.error("Invalid ID: ", validationException);
             return new ResponseEntity<>(validationException.getMessage(), HttpStatus.BAD_REQUEST);
 
-        } catch (DatabaseException dataBaseException) {
-            LOG.error("Device not deleted: ", dataBaseException);
-            return new ResponseEntity<>(dataBaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (FirebaseException firebaseException) {
+            LOG.error("Device not deleted: ", firebaseException);
+            return new ResponseEntity<>(firebaseException.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>("Device deleted", HttpStatus.OK);

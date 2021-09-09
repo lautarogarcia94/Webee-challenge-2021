@@ -1,6 +1,7 @@
 package com.webee.challenge.controller;
 
 
+import com.google.firebase.FirebaseException;
 import com.google.firebase.database.DatabaseException;
 import com.webee.challenge.controllers.DeviceMonitoringController;
 import com.webee.challenge.model.Device;
@@ -43,13 +44,13 @@ public class DeviceMonitoringControllerTest {
     private Device device;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp()throws FirebaseException{
         initMocks(this);
         populateFields();
         populateMocks();
     }
 
-    private void populateMocks() {
+    private void populateMocks() throws FirebaseException{
         when(mockDataBaseService.searchAllDevices()).thenReturn(deviceList);
         when(mockMarshallerService.marshallDeviceList(deviceList)).thenReturn("Marshall device list");
     }
@@ -73,8 +74,8 @@ public class DeviceMonitoringControllerTest {
     }
 
     @Test
-    void shouldReturnErrorMessageWith500StatusWhenExceptionOccurs(){
-        when(mockDataBaseService.searchAllDevices()).thenThrow(new DatabaseException("Database exception mock"));
+    void shouldReturnErrorMessageWith500StatusWhenExceptionOccurs() throws FirebaseException{
+        when(mockDataBaseService.searchAllDevices()).thenThrow(new FirebaseException("Database exception mock"));
 
         ResponseEntity<String> responseEntity = deviceMonitoringController.getDevices();
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
