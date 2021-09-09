@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * This class is a model for registering a new device into FireBase
+ * Class used as a model for registering a new device into FireBase
  */
 @Data
 @Builder

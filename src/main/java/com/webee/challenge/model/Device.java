@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * This class is a model for devices stored in Firebase
+ * Class used as a model for devices stored in FireBase
  */
 @Data
 @Builder
