@@ -84,6 +84,12 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
         LOG.info("Device validated");
     }
 
+    /**
+     * It validates if a date is after 01012020
+     *
+     * @param date date to be validated
+     * @throws ValidationException Exception thrown when the date is before 01012020
+     */
     private void validateDate(LocalDate date) throws ValidationException {
         LOG.info("Validating date: {}", date);
         if (date.compareTo(LocalDate.of(2020, 01, 01)) < 0) {
