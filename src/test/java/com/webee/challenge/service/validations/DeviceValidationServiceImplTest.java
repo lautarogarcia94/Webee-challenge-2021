@@ -76,7 +76,7 @@ public class DeviceValidationServiceImplTest {
                 .macAddress("FF:FF:FF:FF:FF:FF")
                 .build();
 
-        String expectedMessage = "10082021 is not a valid date format (valid format is dd-MM-yyyy)";
+        String expectedMessage = "10082021 is not a valid date format (valid format is ddMMyyyy)";
 
         try {
             deviceValidationService.validateDeviceRequest(deviceRequest);

@@ -17,6 +17,12 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DeviceValidationServiceImpl.class);
 
+    /**
+     * It validates the MAC Address in order to match the valid format FF:FF:FF:FF:FF:FF
+     *
+     * @param macAddress device MAC Address to be validated
+     * @throws ValidationException exception thrown when the parameter is not a valid MAC Address
+     */
     @Override
     public void validateMac(String macAddress) throws ValidationException {
         LOG.info("Validating MAC Address: {}", macAddress);
@@ -28,6 +34,13 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
         LOG.info("{} is a valid MAC Address", macAddress);
     }
 
+    /**
+     * It validates the id in order to match the valid format. The id has 10 characters, and each one
+     * has to be a lower case letter.
+     *
+     * @param id device ID to be validated
+     * @throws ValidationException exception thrown when the parameter is not a valid ID
+     */
     @Override
     public void validateId(String id) throws ValidationException {
         LOG.info("Validating ID: {}", id);
@@ -45,11 +58,18 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
         LOG.info("{} is a valid ID", id);
     }
 
+    /**
+     * It validates the device to be registered. The MAC Address of the device has to match the
+     * FF:FF:FF:FF:FF:FF format, and the date has to have ddMMyyyy format and can not be before 01012020
+     *
+     * @param deviceRequest device to be validated
+     * @throws ValidationException Exception thrown when the parameter is not a valid device
+     */
     @Override
     public void validateDeviceRequest(DeviceRequest deviceRequest) throws ValidationException {
         String macAddress = deviceRequest.getMacAddress();
         String date = deviceRequest.getDate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
         LOG.info("Validating device");
 
         try {
@@ -58,7 +78,7 @@ public class DeviceValidationServiceImpl implements DeviceValidationService {
             validateDate(realDate);
         } catch (DateTimeParseException parseException) {
             LOG.error("{} is not a valid date format", date);
-            throw new ValidationException(date + " is not a valid date format (valid format is dd-MM-yyyy)", parseException);
+            throw new ValidationException(date + " is not a valid date format (valid format is ddMMyyyy)", parseException);
         }
 
         LOG.info("Device validated");
